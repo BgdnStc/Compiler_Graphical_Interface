@@ -1,4 +1,4 @@
-package org.bgdnstc.compiler_graphical_interface;
+package org.bgdnstc;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
