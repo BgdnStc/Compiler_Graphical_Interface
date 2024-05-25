@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.bgdnstc.MainController">
    <children>
-      <TextArea layoutX="53.0" layoutY="50.0" prefHeight="400.0" prefWidth="700.0" />
-      <TextArea layoutX="838.0" layoutY="50.0" prefHeight="400.0" prefWidth="700.0" />
-      <Button layoutX="53.0" layoutY="480.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="701.0" layoutY="480.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="838.0" layoutY="480.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="1486.0" layoutY="480.0" mnemonicParsing="false" text="Button" />
+      <TextArea fx:id="source1TextArea" layoutX="53.0" layoutY="50.0" prefHeight="400.0" prefWidth="740.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="110.0">
+         <font>
+            <Font name="Consolas" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor></TextArea>
+      <TextArea fx:id="source2TextArea" layoutX="838.0" layoutY="50.0" prefHeight="400.0" prefWidth="740.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="110.0">
+         <font>
+            <Font name="Consolas" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor></TextArea>
+      <Button fx:id="compileButton1" layoutX="50.0" layoutY="533.0" mnemonicParsing="false" text="Compile1" />
+      <Button fx:id="runButton1" layoutX="145.0" layoutY="533.0" mnemonicParsing="false" text="Run1" />
+      <Button fx:id="compileButton2" layoutX="810.0" layoutY="533.0" mnemonicParsing="false" text="Compile" />
+      <Button fx:id="runButton2" layoutX="905.0" layoutY="533.0" mnemonicParsing="false" text="Run" />
+      <Label layoutX="50.0" layoutY="68.0" text="Source code:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="85.0">
+         <font>
+            <Font name="Calibri Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="22.0" text="ByteNet Compiler" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="System Bold" size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="810.0" layoutY="85.0" text="Source code:" AnchorPane.rightAnchor="695.0" AnchorPane.topAnchor="85.0">
+         <font>
+            <Font name="Calibri Bold Italic" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
