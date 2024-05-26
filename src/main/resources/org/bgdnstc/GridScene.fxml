@@ -16,58 +16,104 @@
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" />
   </columnConstraints>
   <rowConstraints>
-      <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="20.0" minHeight="20.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="300.0" minHeight="300.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="30.0" minHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="70.0" minHeight="70.0" prefHeight="70.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="600.0" minHeight="450.0" prefHeight="456.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="247.0" minHeight="10.0" prefHeight="244.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TextArea fx:id="textAreaSource1" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <font>
-            <Font name="Consolas" size="24.0" />
-         </font>
-      </TextArea>
-      <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <font>
-            <Font name="Consolas" size="24.0" />
-         </font>
-      </TextArea>
-      <MenuBar GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <MenuBar GridPane.columnIndex="1">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#newFile1" text="New source 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#newFile2" text="New source 2" />
+              <MenuItem mnemonicParsing="false" onAction="#openFile1" text="Open file source 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#openFile2" text="Open file source 2" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeFile1" text="Close source 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeFile2" text="Close source 2" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Save">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#saveFile1" text="Save source 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveFile2" text="Save source 2" />
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
               <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Settings">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" onAction="#saveFile" text="Save">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Save Source 1" />
-               </items>
-            </Menu>
         </menus>
       </MenuBar>
-      <Button mnemonicParsing="false" prefWidth="60.0" text="Compile" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-      <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-      <Button mnemonicParsing="false" prefWidth="60.0" text="Compile" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-      <ImageView fx:id="imageViewHeader" fitHeight="64.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="CENTER">
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="15.0" minWidth="15.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="25.0" minHeight="25.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="450.0" minHeight="450.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextArea fx:id="textAreaSource1" prefHeight="370.0" prefWidth="740.0" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Consolas" size="24.0" />
+               </font>
+            </TextArea>
+            <TextArea fx:id="textAreaSource2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Consolas" size="24.0" />
+               </font>
+            </TextArea>
+            <GridPane GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#compile1" prefWidth="60.0" text="Compile" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" prefWidth="60.0" text="Compile" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <ImageView fx:id="imageViewHeader" fitHeight="64.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="CENTER">
          <image>
             <Image url="@ByteNetHeader.png" />
          </image>

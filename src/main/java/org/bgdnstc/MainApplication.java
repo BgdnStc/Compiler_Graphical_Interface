@@ -32,7 +32,7 @@ public class MainApplication extends Application {
 
     public void logout(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Close application");
+        alert.setTitle("Exit application");
         alert.setHeaderText("Do you want to close the application?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {

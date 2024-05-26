@@ -10,12 +10,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class MainController extends Application {
     @FXML
@@ -34,33 +32,116 @@ public class MainController extends Application {
     private Button buttonRun1;
     @FXML
     private Button buttonRun2;
+    private static String source1File;
+    private static String source2File;
 
     @FXML
     public void initialize() {
         System.out.println("Initialized.");
         Image header = new Image(new File("src/main/resources/org/bgdnstc/ByteNetHeader.png").toURI().toString());
         imageViewHeader.setImage(header);
-        openFile();
     }
 
     @FXML
-    public void openFile() {
+    public void newFile1() {
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            try {
+                textAreaSource1.setText(Files.readString(selectedFile.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML
-    private void saveFile() {
-        System.out.println(textAreaSource1.getParagraphs().toArray()[0].toString().length());
+    public void newFile2() {
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            try {
+                textAreaSource1.setText(Files.readString(selectedFile.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    public void openFile1() {
+        System.out.println("Open file.");
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            try {
+                textAreaSource1.setText(Files.readString(selectedFile.toPath()));
+                System.out.print(Files.readString(selectedFile.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    public void openFile2() {
+        System.out.println("Open file.");
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            try {
+                textAreaSource2.setText(Files.readString(selectedFile.toPath()));
+                System.out.print(Files.readString(selectedFile.toPath()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    private void saveFile1() {
         try {
-            if (textAreaSource1.getParagraphs().toArray()[0].toString().isEmpty()) {
-                Files.write(Path.of("source1.txt"), textAreaSource1.getParagraphs());
+            if (!textAreaSource1.getParagraphs().toArray()[0].toString().isEmpty()) {
+                Files.write(Path.of("source1.bynt"), textAreaSource1.getParagraphs());
             } else {
-                System.out.println("empty");
+                System.out.println("Nothing to be saved.");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    private void saveFile2() {
+        try {
+            if (!textAreaSource2.getParagraphs().toArray()[0].toString().isEmpty()) {
+                Files.write(Path.of("source2.bynt"), textAreaSource2.getParagraphs());
+            } else {
+                System.out.println("Nothing to be saved.");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void compile1() {
+        try {
+            String compilerExec = "java -cp .;C:\\Users\\Bogdan\\IdeaProjects\\Compiler_Solution_for_JVM_Based_Language\\out\\production\\Compiler_Solution_for_JVM_Based_Language;C:\\Users\\Bogdan\\.m2\\repository\\org\\ow2\\asm\\asm\\9.6\\asm-9.6.jar org.bgdnstc.Main";
+            Runtime.getRuntime().exec(compilerExec);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void closeFile1() {
+        textAreaSource1.setText("");
+    }
+
+    @FXML
+    private void closeFile2() {
+        textAreaSource2.setText("");
     }
 
     @Override
