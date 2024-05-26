@@ -69,7 +69,7 @@
       <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
       <ImageView fx:id="imageViewHeader" fitHeight="64.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="CENTER">
          <image>
-            <Image url="@../../../java/org/bgdnstc/ByteNetHeader.png" />
+            <Image url="@ByteNetHeader.png" />
          </image>
       </ImageView>
    </children>
