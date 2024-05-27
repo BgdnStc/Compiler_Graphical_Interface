@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" vgap="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.bgdnstc.MainController">
+<GridPane fx:id="gridPane" hgap="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" vgap="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.bgdnstc.MainController">
   <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
@@ -94,7 +94,7 @@
               </rowConstraints>
                <children>
                   <Button mnemonicParsing="false" onAction="#compile1" prefWidth="60.0" text="Compile" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Button mnemonicParsing="false" onAction="#run1" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -107,8 +107,8 @@
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" prefWidth="60.0" text="Compile" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#compile2" prefWidth="60.0" text="Compile" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#run2" prefWidth="60.0" text="Run" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
