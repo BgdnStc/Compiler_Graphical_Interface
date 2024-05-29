@@ -19,6 +19,8 @@ public class SettingsController extends Application {
     private TextField textFieldByteNet;
     @FXML
     private TextField textFieldASM;
+    @FXML
+    private TextField textFieldOutput;
 
     @FXML
     private void initialize() {
@@ -36,6 +38,13 @@ public class SettingsController extends Application {
         if (!textFieldASM.getCharacters().isEmpty()) {
             try {
                 Files.write(Path.of("src/main/resources/org/bgdnstc/configASM.txt"), (textFieldASM.getText()).getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (!textFieldOutput.getCharacters().isEmpty()) {
+            try {
+                Files.write(Path.of("src/main/resources/org/bgdnstc/configOut.txt"), (textFieldOutput.getText().getBytes()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

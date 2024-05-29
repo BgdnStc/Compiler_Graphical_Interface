@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MainController extends Application {
@@ -42,6 +43,7 @@ public class MainController extends Application {
     private static Path source2File = null;
     private static Path asmPath = null;
     private static Path byntPath = null;
+    private static Path outputPath = null;
 
     @FXML
     public void initialize() {
@@ -50,11 +52,11 @@ public class MainController extends Application {
         imageViewHeader.setImage(header);
         try {
             byntPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configBynt.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configBynt.txt"))) : null;
-            if (Files.readString(Path.of("src/main/resources/org/bgdnstc/configBynt.txt")).isEmpty()) {
-                System.out.println(byntPath);
-            }
+            System.out.println(byntPath);
             asmPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configASM.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configASM.txt"))) : null;
             System.out.println(asmPath);
+            outputPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configOut.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configOut.txt"))) : null;
+            System.out.println(outputPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -131,16 +133,16 @@ public class MainController extends Application {
                     saveFile1();
                     System.out.println(source1File);
                     if (source1File != null) {
-                        String compilerExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                        System.out.println(compilerExec);
-                        Runtime.getRuntime().exec(compilerExec);
+                        String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
+                        System.out.println(compileExec);
+                        Runtime.getRuntime().exec(compileExec);
                         System.out.println("Compiled!");
                     }
                 } else {
                     saveFile1();
-                    String compilerExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                    System.out.println(compilerExec);
-                    Runtime.getRuntime().exec(compilerExec);
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
+                    System.out.println(compileExec);
+                    Runtime.getRuntime().exec(compileExec);
                     System.out.println("Compiled!");
                 }
             }
@@ -151,17 +153,72 @@ public class MainController extends Application {
 
     @FXML
     private void compile2() {
-
+        try {
+            if (byntPath == null || asmPath == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("No Internal Library Paths");
+                alert.setHeaderText("Compiler configuration file paths are missing!");
+                alert.showAndWait();
+            } else {
+                if (source2File == null) {
+                    saveFile2();
+                    System.out.println(source2File);
+                    if (source2File != null) {
+                        String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
+                        System.out.println(compileExec);
+                        Runtime.getRuntime().exec(compileExec);
+                        System.out.println("Compiled!");
+                    }
+                } else {
+                    saveFile2();
+                    System.out.println(source2File);
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
+                    System.out.println(compileExec);
+                    Runtime.getRuntime().exec(compileExec);
+                    System.out.println("Compiled!");
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     private void run1() {
-
+        try {
+            if (source1File == null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No source");
+                alert.setHeaderText("The source file is missing!");
+                alert.showAndWait();
+            } else {
+                String[] s = source1File.toString().split("\\\\");
+                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
+                Runtime.getRuntime().exec(runExec);
+                System.out.println(runExec);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     private void run2() {
-
+        try {
+            if (source2File == null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No source");
+                alert.setHeaderText("The source file is missing!");
+                alert.showAndWait();
+            } else {
+                String[] s = source2File.toString().split("\\\\");
+                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
+                Runtime.getRuntime().exec(runExec);
+                System.out.println(runExec);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML

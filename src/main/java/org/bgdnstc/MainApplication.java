@@ -23,7 +23,7 @@ public class MainApplication extends Application {
         System.out.println(icon.getWidth());
         mainStage = stage;
         stage.getIcons().add(icon);
-        stage.setTitle("ByteNet");
+        stage.setTitle("ByteNet.");
         stage.setOnCloseRequest(event -> {
             event.consume();
             logout(stage);
