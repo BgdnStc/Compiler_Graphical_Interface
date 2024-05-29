@@ -12,14 +12,16 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainApplication extends Application {
+    public static Stage mainStage;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("GridScene.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("MainScene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Image icon = new Image(new File("src/main/resources/org/bgdnstc/ByteNetIcon.png").toURI().toString());
         System.out.println(icon.getHeight());
         System.out.println(icon.getWidth());
+        mainStage = stage;
         stage.getIcons().add(icon);
         stage.setTitle("ByteNet");
         stage.setOnCloseRequest(event -> {
@@ -32,7 +34,7 @@ public class MainApplication extends Application {
 
     public void logout(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Exit application");
+        alert.setTitle("Exit Application");
         alert.setHeaderText("Do you want to close the application?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
