@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -11,7 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -39,6 +44,10 @@ public class MainController extends Application {
     private Button buttonRun1;
     @FXML
     private Button buttonRun2;
+    @FXML
+    private TextArea textAreaCommand1;
+    @FXML
+    private TextArea textAreaCommand2;
     private static Path source1File = null;
     private static Path source2File = null;
     private static Path asmPath = null;
@@ -48,18 +57,26 @@ public class MainController extends Application {
     @FXML
     public void initialize() {
         System.out.println("Initialized.");
-        Image header = new Image(new File("src/main/resources/org/bgdnstc/ByteNetHeader.png").toURI().toString());
+        Image header = new Image(new File("src/main/resources/org/bgdnstc/images/ByteNetHeader.png").toURI().toString());
         imageViewHeader.setImage(header);
         try {
-            byntPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configBynt.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configBynt.txt"))) : null;
+            byntPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configBynt.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configBynt.txt"))) : null;
             System.out.println(byntPath);
-            asmPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configASM.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configASM.txt"))) : null;
+            asmPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configASM.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configASM.txt"))) : null;
             System.out.println(asmPath);
-            outputPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/configOut.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/configOut.txt"))) : null;
+            outputPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configOut.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configOut.txt"))) : null;
             System.out.println(outputPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        BackgroundFill backgroundFill = new BackgroundFill(Color.valueOf(String.valueOf(Color.BLACK)), new CornerRadii(0), new Insets(0));
+        Background background = new Background(backgroundFill);
+        textAreaCommand1.setBackground(background);
+        textAreaCommand2.setBackground(background);
+        textAreaSource1.setBackground(background);
+        textAreaSource2.setBackground(background);
+        textAreaCommand1.setStyle("-fx-text-fill: lightgreen ;");
+        textAreaCommand2.setStyle("-fx-text-fill: lightgreen ;");
     }
 
     @FXML

@@ -18,7 +18,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("MainScene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        Image icon = new Image(new File("src/main/resources/org/bgdnstc/ByteNetIcon.png").toURI().toString());
+        Image icon = new Image(new File("src/main/resources/org/bgdnstc/images/ByteNetIcon.png").toURI().toString());
         System.out.println(icon.getHeight());
         System.out.println(icon.getWidth());
         mainStage = stage;
