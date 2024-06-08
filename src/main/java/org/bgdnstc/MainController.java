@@ -20,8 +20,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -77,6 +79,7 @@ public class MainController extends Application {
         textAreaSource2.setBackground(background);
         textAreaCommand1.setStyle("-fx-text-fill: lightgreen ;");
         textAreaCommand2.setStyle("-fx-text-fill: lightgreen ;");
+
     }
 
     @FXML
@@ -138,107 +141,6 @@ public class MainController extends Application {
     }
 
     @FXML
-    public void compile1() {
-        try {
-            if (byntPath == null || asmPath == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("No Internal Library Paths");
-                alert.setHeaderText("Compiler configuration file paths are missing!");
-                alert.showAndWait();
-            } else {
-                if (source1File == null) {
-                    saveFile1();
-                    System.out.println(source1File);
-                    if (source1File != null) {
-                        String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                        System.out.println(compileExec);
-                        Runtime.getRuntime().exec(compileExec);
-                        System.out.println("Compiled!");
-                    }
-                } else {
-                    saveFile1();
-                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                    System.out.println(compileExec);
-                    Runtime.getRuntime().exec(compileExec);
-                    System.out.println("Compiled!");
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    private void compile2() {
-        try {
-            if (byntPath == null || asmPath == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("No Internal Library Paths");
-                alert.setHeaderText("Compiler configuration file paths are missing!");
-                alert.showAndWait();
-            } else {
-                if (source2File == null) {
-                    saveFile2();
-                    System.out.println(source2File);
-                    if (source2File != null) {
-                        String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
-                        System.out.println(compileExec);
-                        Runtime.getRuntime().exec(compileExec);
-                        System.out.println("Compiled!");
-                    }
-                } else {
-                    saveFile2();
-                    System.out.println(source2File);
-                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
-                    System.out.println(compileExec);
-                    Runtime.getRuntime().exec(compileExec);
-                    System.out.println("Compiled!");
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    private void run1() {
-        try {
-            if (source1File == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No source");
-                alert.setHeaderText("The source file is missing!");
-                alert.showAndWait();
-            } else {
-                String[] s = source1File.toString().split("\\\\");
-                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
-                Runtime.getRuntime().exec(runExec);
-                System.out.println(runExec);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    private void run2() {
-        try {
-            if (source2File == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No source");
-                alert.setHeaderText("The source file is missing!");
-                alert.showAndWait();
-            } else {
-                String[] s = source2File.toString().split("\\\\");
-                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
-                Runtime.getRuntime().exec(runExec);
-                System.out.println(runExec);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
     private void closeFile1() {
         textAreaSource1.setText("");
         source1File = null;
@@ -288,6 +190,227 @@ public class MainController extends Application {
     }
 
     @FXML
+    public void compile1() {
+        boolean error = false;
+        try {
+            if (byntPath == null || asmPath == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("No Internal Library Paths");
+                alert.setHeaderText("Compiler configuration file paths are missing!");
+                alert.showAndWait();
+            } else {
+                if (source1File == null) {
+                    saveFile1();
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
+                    System.out.println(source1File);
+                    appendTextCommand1("Saving...\nParsing...\n");
+                    if (source1File != null) {
+                        System.out.println(compileExec);
+                        Process process = Runtime.getRuntime().exec(compileExec);
+                        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String s;
+                        System.out.println("Here is the standard error of the command (if any):\n");
+                        while (true) {
+                            try {
+                                if ((s = stdError.readLine()) == null) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            System.out.println(s);
+                            appendTextCommand1(s);
+                            error = true;
+                        }
+                        System.out.println("Here is the standard output of the command:\n");
+                        while (true) {
+                            try {
+                                if ((s = stdInput.readLine()) == null) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            System.out.println(s);
+                            appendTextCommand1("Processing file: \"");
+                            appendTextCommand1(s);
+                            appendTextCommand1("\"\n");
+                        }
+                        System.out.println("Compiled!");
+                    }
+                } else {
+                    saveFile1();
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
+                    System.out.println(compileExec);
+                    appendTextCommand1("Saving...\nParsing...\n");
+                    Process process = Runtime.getRuntime().exec(compileExec);
+                    BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String s;
+                    System.out.println("Here is the standard error of the command (if any):\n");
+                    while (true) {
+                        try {
+                            if ((s = stdError.readLine()) == null) break;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println(s);
+                        appendTextCommand1(s);
+                        error = true;
+                    }
+                    System.out.println("Here is the standard output of the command:\n");
+                    while (true) {
+                        try {
+                            if ((s = stdInput.readLine()) == null) break;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println(s);
+                        appendTextCommand1("Processing file: \"");
+                        appendTextCommand1(s);
+                        appendTextCommand1("\"\n");
+                    }
+                    System.out.println("Compiled!");
+                }
+                if (!error) {
+                    appendTextCommand1("Compiled!\n\n");
+                } else {
+                    appendTextCommand1(("Error!\n\n"));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void compile2() {
+        boolean error = false;
+        try {
+            if (byntPath == null || asmPath == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("No Internal Library Paths");
+                alert.setHeaderText("Compiler configuration file paths are missing!");
+                alert.showAndWait();
+            } else {
+                if (source2File == null) {
+                    saveFile2();
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
+                    System.out.println(source2File);
+                    appendTextCommand2("Saving...\nParsing...\n");
+                    if (source2File != null) {
+                        System.out.println(compileExec);
+                        Process process = Runtime.getRuntime().exec(compileExec);
+                        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String s;
+                        System.out.println("Here is the standard error of the command (if any):\n");
+                        while (true) {
+                            try {
+                                if ((s = stdError.readLine()) == null) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            System.out.println(s);
+                            appendTextCommand2(s);
+                            error = true;
+                        }
+                        System.out.println("Here is the standard output of the command:\n");
+                        while (true) {
+                            try {
+                                if ((s = stdInput.readLine()) == null) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            System.out.println(s);
+                            appendTextCommand2("Processing file: \"");
+                            appendTextCommand2(s);
+                            appendTextCommand2("\"\n");
+                        }
+                        System.out.println("Compiled!");
+                    }
+                } else {
+                    saveFile2();
+                    String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
+                    System.out.println(source2File);
+                    System.out.println(compileExec);
+                    appendTextCommand2("Saving...\nParsing...\n");
+                    Process process = Runtime.getRuntime().exec(compileExec);
+                    BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                    BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    String s;
+                    System.out.println("Here is the standard error of the command (if any):\n");
+                    while (true) {
+                        try {
+                            if ((s = stdError.readLine()) == null) break;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println(s);
+                        appendTextCommand2(s);
+                        error = true;
+                    }
+                    System.out.println("Here is the standard output of the command:\n");
+                    while (true) {
+                        try {
+                            if ((s = stdInput.readLine()) == null) break;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println(s);
+                        appendTextCommand2("Processing file: \"");
+                        appendTextCommand2(s);
+                        appendTextCommand2("\"\n");
+                    }
+                    System.out.println("Compiled!");
+                }
+                if (!error) {
+                    appendTextCommand2("Compiled!\n\n");
+                } else {
+                    appendTextCommand2(("Error!\n\n"));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void run1() {
+        try {
+            if (source1File == null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No source");
+                alert.setHeaderText("The source file is missing!");
+                alert.showAndWait();
+            } else {
+                String[] s = source1File.toString().split("\\\\");
+                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
+                Runtime.getRuntime().exec(runExec);
+                System.out.println(runExec);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void run2() {
+        try {
+            if (source2File == null) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No source");
+                alert.setHeaderText("The source file is missing!");
+                alert.showAndWait();
+            } else {
+                String[] s = source2File.toString().split("\\\\");
+                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
+                Runtime.getRuntime().exec(runExec);
+                System.out.println(runExec);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
     public void openSettings(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("SettingsScene.fxml")));
@@ -298,6 +421,14 @@ public class MainController extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void appendTextCommand1(String string) {
+        textAreaCommand1.appendText(string);
+    }
+
+    private void appendTextCommand2(String string) {
+        textAreaCommand2.appendText(string);
     }
 
     @Override
