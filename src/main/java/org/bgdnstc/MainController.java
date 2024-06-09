@@ -26,10 +26,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainController extends Application {
+    private static Path source1File = null;
+    private static Path source2File = null;
+    private static Path asmPath = null;
+    private static Path byntPath = null;
+    private static Path outputPath = null;
     @FXML
     private GridPane gridPane;
     @FXML
@@ -50,11 +55,6 @@ public class MainController extends Application {
     private TextArea textAreaCommand1;
     @FXML
     private TextArea textAreaCommand2;
-    private static Path source1File = null;
-    private static Path source2File = null;
-    private static Path asmPath = null;
-    private static Path byntPath = null;
-    private static Path outputPath = null;
 
     @FXML
     public void initialize() {
@@ -203,7 +203,7 @@ public class MainController extends Application {
                     saveFile1();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
                     System.out.println(source1File);
-                    appendTextCommand1("Saving...\nParsing...\n");
+                    appendTextCommand1("\nSaving...\nParsing...\n");
                     if (source1File != null) {
                         System.out.println(compileExec);
                         Process process = Runtime.getRuntime().exec(compileExec);
@@ -270,9 +270,9 @@ public class MainController extends Application {
                     System.out.println("Compiled!");
                 }
                 if (!error) {
-                    appendTextCommand1("Compiled!\n\n");
+                    appendTextCommand1("Compiled!\n");
                 } else {
-                    appendTextCommand1(("Error!\n\n"));
+                    appendTextCommand1(("^^^Error!^^^\n"));
                 }
             }
         } catch (IOException e) {
@@ -294,7 +294,7 @@ public class MainController extends Application {
                     saveFile2();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
                     System.out.println(source2File);
-                    appendTextCommand2("Saving...\nParsing...\n");
+                    appendTextCommand2("\nSaving...\nParsing...\n");
                     if (source2File != null) {
                         System.out.println(compileExec);
                         Process process = Runtime.getRuntime().exec(compileExec);
@@ -362,9 +362,9 @@ public class MainController extends Application {
                     System.out.println("Compiled!");
                 }
                 if (!error) {
-                    appendTextCommand2("Compiled!\n\n");
+                    appendTextCommand2("Compiled!\n");
                 } else {
-                    appendTextCommand2(("Error!\n\n"));
+                    appendTextCommand2(("^^^Error!^^^\n"));
                 }
             }
         } catch (IOException e) {
@@ -374,39 +374,106 @@ public class MainController extends Application {
 
     @FXML
     private void run1() {
-        try {
-            if (source1File == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No source");
-                alert.setHeaderText("The source file is missing!");
-                alert.showAndWait();
-            } else {
-                String[] s = source1File.toString().split("\\\\");
-                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
-                Runtime.getRuntime().exec(runExec);
+        AtomicBoolean error = new AtomicBoolean(false);
+        if (source1File == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No source");
+            alert.setHeaderText("There is no source file to run!");
+            alert.showAndWait();
+        } else {
+            String[] source1 = source1File.toString().split("\\\\");
+            String runExec = "java -cp .;" + outputPath + " " + source1[source1.length - 1].split("\\.")[0];
+            new Thread(() -> {
+                Process process = null;
+                try {
+                    process = Runtime.getRuntime().exec(runExec);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String s;
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while (true) {
+                    try {
+                        if ((s = stdError.readLine()) == null) break;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(s);
+                    appendTextCommand1(s);
+                    error.set(true);
+                }
+                System.out.println("Here is the standard output of the command:\n");
+                appendTextCommand1("\nExecuting...\n");
+                while (true) {
+                    try {
+                        if ((s = stdInput.readLine()) == null) break;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(s);
+                    appendTextCommand1(s);
+                    appendTextCommand1("\n");
+                }
                 System.out.println(runExec);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                if (error.get()) {
+                    appendTextCommand1(("^^^Error!^^^\n"));
+                }
+            }).start();
         }
     }
 
     @FXML
     private void run2() {
-        try {
-            if (source2File == null) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No source");
-                alert.setHeaderText("The source file is missing!");
-                alert.showAndWait();
-            } else {
-                String[] s = source2File.toString().split("\\\\");
-                String runExec = "java -cp .;" + outputPath + " " + s[s.length - 1].split("\\.")[0];
-                Runtime.getRuntime().exec(runExec);
+        AtomicBoolean error = new AtomicBoolean(false);
+        if (source2File == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No source");
+            alert.setHeaderText("There is no source file to run!");
+            alert.showAndWait();
+        } else {
+            String[] source2 = source2File.toString().split("\\\\");
+            String runExec = "java -cp .;" + outputPath + " " + source2[source2.length - 1].split("\\.")[0];
+            new Thread(() -> {
+                Process process = null;
+                try {
+                    process = Runtime.getRuntime().exec(runExec);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String s;
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while (true) {
+                    try {
+                        if ((s = stdError.readLine()) == null) break;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(s);
+                    appendTextCommand2(s);
+                    error.set(true);
+                }
+                System.out.println("Here is the standard output of the command:\n");
+                appendTextCommand2("\nExecuting...\n");
+                while (true) {
+                    try {
+                        if ((s = stdInput.readLine()) == null) break;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(s);
+                    appendTextCommand2(s);
+                    appendTextCommand2("\n\n");
+                }
                 System.out.println(runExec);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                if (error.get()) {
+                    appendTextCommand2(("^^^Error!^^^\n"));
+                }
+            }).start();
+            System.out.println(runExec);
         }
     }
 
