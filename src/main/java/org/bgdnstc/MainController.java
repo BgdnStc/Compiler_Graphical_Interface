@@ -240,7 +240,7 @@ public class MainController extends Application {
                     saveFile1();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
                     System.out.println(compileExec);
-                    appendTextCommand1("Saving...\nParsing...\n");
+                    appendTextCommand1("\nSaving...\nParsing...\n");
                     Process process = Runtime.getRuntime().exec(compileExec);
                     BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -332,7 +332,7 @@ public class MainController extends Application {
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
                     System.out.println(source2File);
                     System.out.println(compileExec);
-                    appendTextCommand2("Saving...\nParsing...\n");
+                    appendTextCommand2("\nSaving...\nParsing...\n");
                     Process process = Runtime.getRuntime().exec(compileExec);
                     BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
