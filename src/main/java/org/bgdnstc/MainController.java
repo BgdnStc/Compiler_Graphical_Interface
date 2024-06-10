@@ -1,6 +1,7 @@
 package org.bgdnstc;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -392,7 +393,7 @@ public class MainController extends Application {
                 }
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String s;
+                String s = null;
                 System.out.println("Here is the standard error of the command (if any):\n");
                 while (true) {
                     try {
@@ -401,11 +402,12 @@ public class MainController extends Application {
                         throw new RuntimeException(e);
                     }
                     System.out.println(s);
-                    appendTextCommand1(s);
+                    String errorString = s;
+                    Platform.runLater(() -> appendTextCommand1(errorString));
                     error.set(true);
                 }
                 System.out.println("Here is the standard output of the command:\n");
-                appendTextCommand1("\nExecuting...\n");
+                Platform.runLater(() -> appendTextCommand1("\nExecuting...\n"));
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
@@ -413,12 +415,13 @@ public class MainController extends Application {
                         throw new RuntimeException(e);
                     }
                     System.out.println(s);
-                    appendTextCommand1(s);
-                    appendTextCommand1("\n");
+                    String stdOutputString = s;
+                    Platform.runLater(() -> appendTextCommand1(stdOutputString));
+                    Platform.runLater(() -> appendTextCommand1("\n"));
                 }
                 System.out.println(runExec);
                 if (error.get()) {
-                    appendTextCommand1(("^^^Error!^^^\n"));
+                    Platform.runLater(() -> appendTextCommand1(("^^^Error!^^^\n")));
                 }
             }).start();
         }
@@ -444,7 +447,7 @@ public class MainController extends Application {
                 }
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String s;
+                String s = null;
                 System.out.println("Here is the standard error of the command (if any):\n");
                 while (true) {
                     try {
@@ -453,11 +456,12 @@ public class MainController extends Application {
                         throw new RuntimeException(e);
                     }
                     System.out.println(s);
-                    appendTextCommand2(s);
+                    final String errorString = s;
+                    Platform.runLater(() -> appendTextCommand2(errorString));
                     error.set(true);
                 }
                 System.out.println("Here is the standard output of the command:\n");
-                appendTextCommand2("\nExecuting...\n");
+                Platform.runLater(() -> appendTextCommand2("\nExecuting...\n"));
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
@@ -465,12 +469,13 @@ public class MainController extends Application {
                         throw new RuntimeException(e);
                     }
                     System.out.println(s);
-                    appendTextCommand2(s);
-                    appendTextCommand2("\n\n");
+                    final String stdOutputString = s;
+                    Platform.runLater(() -> appendTextCommand2(stdOutputString));
+                    Platform.runLater(() -> appendTextCommand2("\n"));
                 }
                 System.out.println(runExec);
                 if (error.get()) {
-                    appendTextCommand2(("^^^Error!^^^\n"));
+                    Platform.runLater(() -> appendTextCommand2(("^^^Error!^^^\n")));
                 }
             }).start();
             System.out.println(runExec);
