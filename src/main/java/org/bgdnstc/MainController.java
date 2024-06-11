@@ -384,6 +384,7 @@ public class MainController extends Application {
         } else {
             String[] source1 = source1File.toString().split("\\\\");
             String runExec = "java -cp .;" + outputPath + " " + source1[source1.length - 1].split("\\.")[0];
+            Platform.runLater(() -> appendTextCommand1("\nExecuting...\n"));
             new Thread(() -> {
                 Process process = null;
                 try {
@@ -407,7 +408,6 @@ public class MainController extends Application {
                     error.set(true);
                 }
                 System.out.println("Here is the standard output of the command:\n");
-                Platform.runLater(() -> appendTextCommand1("\nExecuting...\n"));
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
@@ -440,6 +440,7 @@ public class MainController extends Application {
         } else {
             String[] source2 = source2File.toString().split("\\\\");
             String runExec = "java -cp .;" + outputPath + " " + source2[source2.length - 1].split("\\.")[0];
+            Platform.runLater(() -> appendTextCommand2("\nExecuting...\n"));
             new Thread(() -> {
                 Process process = null;
                 try {
@@ -463,7 +464,6 @@ public class MainController extends Application {
                     error.set(true);
                 }
                 System.out.println("Here is the standard output of the command:\n");
-                Platform.runLater(() -> appendTextCommand2("\nExecuting...\n"));
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
@@ -479,7 +479,7 @@ public class MainController extends Application {
                 if (error.get()) {
                     Platform.runLater(() -> appendTextCommand2(("^^^Error!^^^\n")));
                 } else {
-                    Platform.runLater(() -> appendTextCommand1("\nExecution finished with success!\n"));
+                    Platform.runLater(() -> appendTextCommand2("\nExecution finished with success!\n"));
                 }
             }).start();
             System.out.println(runExec);
