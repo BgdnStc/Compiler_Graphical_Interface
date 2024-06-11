@@ -44,11 +44,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#saveFile2" text="Save source 2" />
                </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
             <Menu mnemonicParsing="false" text="Settings">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Configure" />

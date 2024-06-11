@@ -377,7 +377,7 @@ public class MainController extends Application {
     private void run1() {
         AtomicBoolean error = new AtomicBoolean(false);
         if (source1File == null) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("No source");
             alert.setHeaderText("There is no source file to run!");
             alert.showAndWait();
@@ -422,6 +422,8 @@ public class MainController extends Application {
                 System.out.println(runExec);
                 if (error.get()) {
                     Platform.runLater(() -> appendTextCommand1(("^^^Error!^^^\n")));
+                } else {
+                    Platform.runLater(() -> appendTextCommand1("\nExecution finished with success!\n"));
                 }
             }).start();
         }
@@ -431,7 +433,7 @@ public class MainController extends Application {
     private void run2() {
         AtomicBoolean error = new AtomicBoolean(false);
         if (source2File == null) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("No source");
             alert.setHeaderText("There is no source file to run!");
             alert.showAndWait();
@@ -476,6 +478,8 @@ public class MainController extends Application {
                 System.out.println(runExec);
                 if (error.get()) {
                     Platform.runLater(() -> appendTextCommand2(("^^^Error!^^^\n")));
+                } else {
+                    Platform.runLater(() -> appendTextCommand1("\nExecution finished with success!\n"));
                 }
             }).start();
             System.out.println(runExec);
