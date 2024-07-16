@@ -9,14 +9,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -37,21 +35,11 @@ public class MainController extends Application {
     private static Path byntPath = null;
     private static Path outputPath = null;
     @FXML
-    private GridPane gridPane;
-    @FXML
     private ImageView imageViewHeader;
     @FXML
     private TextArea textAreaSource1;
     @FXML
     private TextArea textAreaSource2;
-    @FXML
-    private Button buttonCompile1;
-    @FXML
-    private Button buttonCompile2;
-    @FXML
-    private Button buttonRun1;
-    @FXML
-    private Button buttonRun2;
     @FXML
     private TextArea textAreaCommand1;
     @FXML
@@ -59,16 +47,12 @@ public class MainController extends Application {
 
     @FXML
     public void initialize() {
-        System.out.println("Initialized.");
         Image header = new Image(new File("src/main/resources/org/bgdnstc/images/ByteNetHeader.png").toURI().toString());
         imageViewHeader.setImage(header);
         try {
             byntPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configBynt.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configBynt.txt"))) : null;
-            System.out.println(byntPath);
             asmPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configASM.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configASM.txt"))) : null;
-            System.out.println(asmPath);
             outputPath = !Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configOut.txt")).isEmpty() ? Path.of(Files.readString(Path.of("src/main/resources/org/bgdnstc/config/configOut.txt"))) : null;
-            System.out.println(outputPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -113,7 +97,6 @@ public class MainController extends Application {
 
     @FXML
     public void openFile1() {
-        System.out.println("Open file.");
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
@@ -128,7 +111,6 @@ public class MainController extends Application {
 
     @FXML
     public void openFile2() {
-        System.out.println("Open file.");
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
@@ -155,7 +137,6 @@ public class MainController extends Application {
 
     @FXML
     private void saveFile1() {
-        System.out.println("Saving");
         try {
             if (!textAreaSource1.getParagraphs().toArray()[0].toString().isEmpty()) {
                 if (source1File != null) {
@@ -164,8 +145,6 @@ public class MainController extends Application {
                     source1File = Path.of("source1.bynt").toAbsolutePath();
                     Files.write(Path.of("source1.bynt"), textAreaSource1.getParagraphs());
                 }
-            } else {
-                System.out.println("Nothing to be saved.");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -182,8 +161,6 @@ public class MainController extends Application {
                     source2File = Path.of("source2.bynt").toAbsolutePath();
                     Files.write(Path.of("source2.bynt"), textAreaSource2.getParagraphs());
                 }
-            } else {
-                System.out.println("Nothing to be saved.");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -203,72 +180,59 @@ public class MainController extends Application {
                 if (source1File == null) {
                     saveFile1();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                    System.out.println(source1File);
                     appendTextCommand1("\nSaving...\nParsing...\n");
                     if (source1File != null) {
-                        System.out.println(compileExec);
                         Process process = Runtime.getRuntime().exec(compileExec);
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                         BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String s;
-                        System.out.println("Here is the standard error of the command (if any):\n");
                         while (true) {
                             try {
                                 if ((s = stdError.readLine()) == null) break;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            System.out.println(s);
                             appendTextCommand1(s);
                             error = true;
                         }
-                        System.out.println("Here is the standard output of the command:\n");
                         while (true) {
                             try {
                                 if ((s = stdInput.readLine()) == null) break;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            System.out.println(s);
                             appendTextCommand1("Processing file: \"");
                             appendTextCommand1(s);
                             appendTextCommand1("\"\n");
                         }
-                        System.out.println("Compiled!");
                     }
                 } else {
                     saveFile1();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source1File;
-                    System.out.println(compileExec);
                     appendTextCommand1("\nSaving...\nParsing...\n");
                     Process process = Runtime.getRuntime().exec(compileExec);
                     BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     String s;
-                    System.out.println("Here is the standard error of the command (if any):\n");
                     while (true) {
                         try {
                             if ((s = stdError.readLine()) == null) break;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(s);
                         appendTextCommand1(s);
                         error = true;
                     }
-                    System.out.println("Here is the standard output of the command:\n");
                     while (true) {
                         try {
                             if ((s = stdInput.readLine()) == null) break;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(s);
                         appendTextCommand1("Processing file: \"");
                         appendTextCommand1(s);
                         appendTextCommand1("\"\n");
                     }
-                    System.out.println("Compiled!");
                 }
                 if (!error) {
                     appendTextCommand1("Compiled!\n");
@@ -294,73 +258,59 @@ public class MainController extends Application {
                 if (source2File == null) {
                     saveFile2();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
-                    System.out.println(source2File);
                     appendTextCommand2("\nSaving...\nParsing...\n");
                     if (source2File != null) {
-                        System.out.println(compileExec);
                         Process process = Runtime.getRuntime().exec(compileExec);
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                         BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
                         String s;
-                        System.out.println("Here is the standard error of the command (if any):\n");
                         while (true) {
                             try {
                                 if ((s = stdError.readLine()) == null) break;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            System.out.println(s);
                             appendTextCommand2(s);
                             error = true;
                         }
-                        System.out.println("Here is the standard output of the command:\n");
                         while (true) {
                             try {
                                 if ((s = stdInput.readLine()) == null) break;
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            System.out.println(s);
                             appendTextCommand2("Processing file: \"");
                             appendTextCommand2(s);
                             appendTextCommand2("\"\n");
                         }
-                        System.out.println("Compiled!");
                     }
                 } else {
                     saveFile2();
                     String compileExec = "java -cp .;" + byntPath + ";" + asmPath + " org.bgdnstc.Main " + source2File;
-                    System.out.println(source2File);
-                    System.out.println(compileExec);
                     appendTextCommand2("\nSaving...\nParsing...\n");
                     Process process = Runtime.getRuntime().exec(compileExec);
                     BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     String s;
-                    System.out.println("Here is the standard error of the command (if any):\n");
                     while (true) {
                         try {
                             if ((s = stdError.readLine()) == null) break;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(s);
                         appendTextCommand2(s);
                         error = true;
                     }
-                    System.out.println("Here is the standard output of the command:\n");
                     while (true) {
                         try {
                             if ((s = stdInput.readLine()) == null) break;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.println(s);
                         appendTextCommand2("Processing file: \"");
                         appendTextCommand2(s);
                         appendTextCommand2("\"\n");
                     }
-                    System.out.println("Compiled!");
                 }
                 if (!error) {
                     appendTextCommand2("Compiled!\n");
@@ -394,32 +344,27 @@ public class MainController extends Application {
                 }
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String s = null;
-                System.out.println("Here is the standard error of the command (if any):\n");
+                String s;
                 while (true) {
                     try {
                         if ((s = stdError.readLine()) == null) break;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(s);
                     String errorString = s;
                     Platform.runLater(() -> appendTextCommand1(errorString));
                     error.set(true);
                 }
-                System.out.println("Here is the standard output of the command:\n");
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(s);
                     String stdOutputString = s;
                     Platform.runLater(() -> appendTextCommand1(stdOutputString));
                     Platform.runLater(() -> appendTextCommand1("\n"));
                 }
-                System.out.println(runExec);
                 if (error.get()) {
                     Platform.runLater(() -> appendTextCommand1(("^^^Error!^^^\n")));
                 } else {
@@ -450,39 +395,33 @@ public class MainController extends Application {
                 }
                 BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String s = null;
-                System.out.println("Here is the standard error of the command (if any):\n");
+                String s;
                 while (true) {
                     try {
                         if ((s = stdError.readLine()) == null) break;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(s);
                     final String errorString = s;
                     Platform.runLater(() -> appendTextCommand2(errorString));
                     error.set(true);
                 }
-                System.out.println("Here is the standard output of the command:\n");
                 while (true) {
                     try {
                         if ((s = stdInput.readLine()) == null) break;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println(s);
                     final String stdOutputString = s;
                     Platform.runLater(() -> appendTextCommand2(stdOutputString));
                     Platform.runLater(() -> appendTextCommand2("\n"));
                 }
-                System.out.println(runExec);
                 if (error.get()) {
                     Platform.runLater(() -> appendTextCommand2(("^^^Error!^^^\n")));
                 } else {
                     Platform.runLater(() -> appendTextCommand2("\nExecution finished with success!\n"));
                 }
             }).start();
-            System.out.println(runExec);
         }
     }
 

@@ -14,13 +14,15 @@ import java.io.IOException;
 public class MainApplication extends Application {
     public static Stage mainStage;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("MainScene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Image icon = new Image(new File("src/main/resources/org/bgdnstc/images/ByteNetIcon.png").toURI().toString());
-        System.out.println(icon.getHeight());
-        System.out.println(icon.getWidth());
         mainStage = stage;
         stage.getIcons().add(icon);
         stage.setTitle("ByteNet.");
@@ -40,9 +42,5 @@ public class MainApplication extends Application {
         if (alert.showAndWait().get() == ButtonType.OK) {
             stage.close();
         }
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
